@@ -97,6 +97,7 @@ realtime-task-board/
 | React 18   | Node.js  | MongoDB  | Socket.io |
 | TypeScript | Express  | Mongoose | Docker    |
 | Vite       | JWT Auth |          | PyMongo   |
+
 🧪 Testing
 bash
 cd backend && npm test
