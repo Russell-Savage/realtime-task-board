@@ -25,8 +25,20 @@ Real-time collaborative task board (Trello-style) with a Python-powered analytic
 │   React + TS    │◄──►│ Express + Socket │◄──►│   MongoDB    │
 │   (Frontend)    │    │   io + TS        │    │              │
 └─────────────────┘    └──────────────────┘    └──────────────┘
-                              │
+                                │
                        ┌──────────────────┐
                        │ Python Analytics │
                        │     Worker       │
                        └──────────────────┘
+
+🚀 Quick Start
+Prerequisites
+Node.js 18+
+
+Python 3.10+
+
+MongoDB (Docker recommended)
+
+npm or yarn
+
+1. Clone & enter project
