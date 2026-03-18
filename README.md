@@ -95,11 +95,11 @@ realtime-task-board/
 ```
 
 ## 🔧 Tech Stack
-| Frontend   | Backend  | Database | Other     |
-| ---------- | -------- | -------- | --------- |
-| React 18   | Node.js  | MongoDB  | Socket.io |
-| TypeScript | Express  | Mongoose | Docker    |
-| Vite       | JWT Auth |          | PyMongo   |
+| Frontend   | Backend    | Database  | Other     |
+| ---------- | ---------- | --------- | --------- |
+| React 18   | Node.js 20 | MongoDB 7 | Socket.io |
+| TypeScript | Express.js | Mongoose  | Docker    |
+| Vite       | JWT Auth   | PyMongo   | ESLint    |
 
 ## 🧪 Testing
 ```bash
