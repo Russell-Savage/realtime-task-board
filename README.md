@@ -79,8 +79,8 @@ source .venv/bin/activate  # macOS/Linux
 # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 python scripts/run_analytics.py
-```
-\
+```  
+
 
 ## 📁 Project Structure
 ```text
