@@ -106,9 +106,9 @@ cd ../analytics-worker && pytest
 ```
 
 ### 🎯 Future Enhancements
- Email notifications
+ -[]Email notifications
 
- File attachments
+ -[]File attachments
 
  Advanced RBAC
 
