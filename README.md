@@ -99,10 +99,12 @@ realtime-task-board/
 | Vite       | JWT Auth |          | PyMongo   |
 
 🧪 Testing
-bash
+```bash
 cd backend && npm test
 cd ../frontend && npm run test
 cd ../analytics-worker && pytest
+```
+
 🎯 Future Enhancements
  Email notifications
 
