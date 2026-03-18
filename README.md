@@ -80,7 +80,7 @@ source .venv/bin/activate  # macOS/Linux
 pip install -r requirements.txt
 python scripts/run_analytics.py
 ```
-📁 Project Structure
+### 📁 Project Structure
 ```text
 realtime-task-board/
 ├── backend/           # Express + Socket.io + TypeScript
@@ -91,21 +91,21 @@ realtime-task-board/
 ├── LICENSE
 └── README.md
 ```
-###🔧 Tech Stack
+### 🔧 Tech Stack
 | Frontend   | Backend  | Database | Other     |
 | ---------- | -------- | -------- | --------- |
 | React 18   | Node.js  | MongoDB  | Socket.io |
 | TypeScript | Express  | Mongoose | Docker    |
 | Vite       | JWT Auth |          | PyMongo   |
 
-###🧪 Testing
+### 🧪 Testing
 ```bash
 cd backend && npm test
 cd ../frontend && npm run test
 cd ../analytics-worker && pytest
 ```
 
-###🎯 Future Enhancements
+### 🎯 Future Enhancements
  Email notifications
 
  File attachments
@@ -118,7 +118,7 @@ cd ../analytics-worker && pytest
 
  PWA support
 
-###🤝 Contributing
+### 🤝 Contributing
 Fork the project
 
 git checkout -b feature/AmazingFeature
@@ -129,5 +129,5 @@ git push origin feature/AmazingFeature
 
 Open PR
 
-###📄 License
+### 📄 License
 MIT License – see LICENSE.
