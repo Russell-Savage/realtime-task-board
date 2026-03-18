@@ -121,15 +121,15 @@ cd ../analytics-worker && pytest
 
 ### 🤝 Contributing
 
-1. Fork the project
+1.  Fork the project
 
-2. Create feature branch: git checkout -b feature/AmazingFeature
+2.  Create feature branch: git checkout -b feature/AmazingFeature
 
-3. Commit: git commit -m "feat: add AmazingFeature"
+3.  Commit: git commit -m "feat: add AmazingFeature"
 
-4. Push: git push origin feature/AmazingFeature
+4.  Push: git push origin feature/AmazingFeature
 
-5. Open Pull Request
+5.  Open Pull Request
 
 ### 📄 License
 MIT License – see LICENSE.
