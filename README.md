@@ -81,7 +81,6 @@ pip install -r requirements.txt
 python scripts/run_analytics.py
 ```  
 <br>
-<br>
 
 ## 📁 Project Structure
 ```text
