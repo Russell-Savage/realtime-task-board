@@ -20,7 +20,7 @@ Real-time collaborative task board (Trello-style) with a Python-powered analytic
 
 ## 🏗️ Architecture
 
-```text
+
 ┌─────────────────┐    ┌──────────────────┐    ┌──────────────┐
 │   React + TS    │◄──►│ Express + Socket │◄──►│   MongoDB    │
 │   (Frontend)    │    │   io + TS       │    │              │
