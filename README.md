@@ -109,26 +109,27 @@ cd ../analytics-worker && pytest
 
 - - [ ] Email notifications
 
- File attachments
+ - - [ ] File attachments
 
- Advanced RBAC
+ - - [ ] Advanced RBAC
 
- Redis scaling
+ - - [ ] Redis scaling
 
- CI/CD pipeline
+ - - [ ] CI/CD pipeline
 
- PWA support
+ - - [ ] PWA support
 
 ### 🤝 Contributing
-Fork the project
 
-git checkout -b feature/AmazingFeature
+1. Fork the project
 
-git commit -m "feat: add AmazingFeature"
+2. Create feature branch: git checkout -b feature/AmazingFeature
 
-git push origin feature/AmazingFeature
+3. Commit: git commit -m "feat: add AmazingFeature"
 
-Open PR
+4. Push: git push origin feature/AmazingFeature
+
+5. Open Pull Request
 
 ### 📄 License
 MIT License – see LICENSE.
