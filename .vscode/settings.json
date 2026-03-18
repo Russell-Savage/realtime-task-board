@@ -1,0 +1,9 @@
+{
+  "editor.formatOnSave": true,
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/__pycache__": true
+  },
+  "python.defaultInterpreterPath": "${workspaceFolder}/analytics-worker/.venv/bin/python"
+}
