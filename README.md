@@ -106,7 +106,8 @@ cd ../analytics-worker && pytest
 ```
 
 ### 🎯 Future Enhancements
- - [ ] Email notifications
+
+- [ ] Email notifications
 
  File attachments
 
