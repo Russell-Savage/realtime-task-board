@@ -91,35 +91,36 @@ realtime-task-board/
 ├── LICENSE
 └── README.md
 ```
-### 🔧 Tech Stack
+
+## 🔧 Tech Stack
 | Frontend   | Backend  | Database | Other     |
 | ---------- | -------- | -------- | --------- |
 | React 18   | Node.js  | MongoDB  | Socket.io |
 | TypeScript | Express  | Mongoose | Docker    |
 | Vite       | JWT Auth |          | PyMongo   |
 
-### 🧪 Testing
+## 🧪 Testing
 ```bash
 cd backend && npm test
 cd ../frontend && npm run test
 cd ../analytics-worker && pytest
 ```
 
-### 🎯 Future Enhancements
+## 🎯 Future Enhancements
 
 - - [ ] Email notifications
 
- - - [ ] File attachments
+- - [ ] File attachments
 
- - - [ ] Advanced RBAC
+- - [ ] Advanced RBAC
 
- - - [ ] Redis scaling
+- - [ ] Redis scaling
 
- - - [ ] CI/CD pipeline
+- - [ ] CI/CD pipeline
 
- - - [ ] PWA support
+- - [ ] PWA support
 
-### 🤝 Contributing
+## 🤝 Contributing
 
 1.  Fork the project
 
@@ -131,5 +132,5 @@ cd ../analytics-worker && pytest
 
 5.  Open Pull Request
 
-### 📄 License
+## 📄 License
 MIT License – see LICENSE.
