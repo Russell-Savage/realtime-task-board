@@ -80,7 +80,7 @@ source .venv/bin/activate  # macOS/Linux
 pip install -r requirements.txt
 python scripts/run_analytics.py
 ```
-### 📁 Project Structure
+## 📁 Project Structure
 ```text
 realtime-task-board/
 ├── backend/           # Express + Socket.io + TypeScript
