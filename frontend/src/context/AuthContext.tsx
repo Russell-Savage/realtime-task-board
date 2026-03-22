@@ -16,7 +16,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  // ✅ Initialize from localStorage DIRECTLY - no useEffect needed
+  // Initialize from localStorage DIRECTLY - no useEffect needed
   const savedToken = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
   const savedUser = typeof window !== 'undefined' ? localStorage.getItem('user') : null;
   
