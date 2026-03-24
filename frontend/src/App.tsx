@@ -1,10 +1,9 @@
-import React from 'react';
 import { Routes, Route, Link, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import LoginForm from './components/Auth/LoginForm';
 import RegisterForm from './components/Auth/RegisterForm';
-import { ProtectedRoute } from './components/Common/ProtectedRoute';
 import { SocketProvider } from './context/SocketContext';
+import BoardsPage from './pages/BoardsPage';
 
 function AppContent() {
   const { user, logout } = useAuth();
@@ -52,14 +51,7 @@ function AppContent() {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route 
-          path="/boards" 
-          element={
-            <ProtectedRoute>
-              <BoardsPage />
-            </ProtectedRoute>
-          } 
-        />
+        <Route path="/boards" element={<BoardsPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>
@@ -107,21 +99,7 @@ const RegisterPage = () => (
   </div>
 );
 
-const BoardsPage = () => (
-  <div className="max-w-6xl mx-auto px-6 py-12">
-    <h1 className="text-3xl font-bold text-gray-900 mb-8">Your Boards</h1>
-    <p className="text-gray-600 mb-8">Protected boards page - login required!</p>
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div className="border-2 border-dashed border-gray-300 rounded-lg p-12 text-center hover:border-indigo-300 hover:bg-indigo-50 transition-all">
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">Create New Board</h3>
-        <p className="text-gray-600 mb-4">Coming soon...</p>
-        <button className="bg-indigo-600 text-white py-2 px-6 rounded-lg hover:bg-indigo-700">
-          New Board
-        </button>
-      </div>
-    </div>
-  </div>
-);
+
 
 function App() {
   return (

@@ -43,7 +43,7 @@ export class App {
   const authRoutes = require('../src/routes/authRoutes');
   this.app.use('/api/auth', authRoutes);
 
-  const boardRoutes = require('../routes/boardRoutes');
+  const boardRoutes = require('../src/routes/boardRoutes');
   this.app.use('/api/boards', boardRoutes);
 
   // Root API

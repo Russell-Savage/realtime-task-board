@@ -1,6 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
-import React, { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import React, { createContext, useCallback, useContext, useState, useEffect, type ReactNode } from 'react';
 import { authApi, type AuthResponse } from '../api/authApi';
+import { useNavigate } from 'react-router-dom';
 
 interface User { id: string; email: string; }
 
@@ -23,6 +24,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [user, setUser] = useState<User | null>(savedUser ? JSON.parse(savedUser) : null);
   const [token, setToken] = useState<string | null>(savedToken);
   const [loading, setLoading] = useState(false); // No initial loading needed
+  const navigate = useNavigate();
 
   const saveAuth = (response: AuthResponse) => {
     localStorage.setItem('token', response.token);
@@ -41,27 +43,26 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     saveAuth(response);
   };
 
-  const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    setToken(null);
-    setUser(null);
-  };
+  const logout = useCallback(() => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+  setUser(null);
+  navigate('/login', { replace: true });
+}, [navigate]);
 
-  // Optional: Listen for storage changes (other tabs)
-  useEffect(() => {
-    const handleStorageChange = () => {
-      const newToken = localStorage.getItem('token');
-      const newUser = localStorage.getItem('user');
-      
-      if (!newToken || !newUser) {
-        logout();
-      }
-    };
+const handleStorageChange = useCallback(() => {
+  const newToken = localStorage.getItem('token');
+  const newUser = localStorage.getItem('user');
+  setLoading(false);
+  if (!newToken || !newUser) {
+    logout();
+  }
+}, [logout]);
 
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, []);
+useEffect(() => {
+  window.addEventListener('storage', handleStorageChange);
+  return () => window.removeEventListener('storage', handleStorageChange);
+}, [handleStorageChange]);
 
   return (
     <AuthContext.Provider value={{ user, token, loading, login, register, logout }}>
