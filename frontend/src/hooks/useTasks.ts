@@ -110,15 +110,16 @@ export const useTasks = () => {
 useEffect(() => {
   if (!socket || !boardId) return;
 
-    console.log('🔗 Listening for task-updated on board:', boardId); // #5
+    console.log('🔗 Listening for task-updated on board:', boardId);
 
   const handleTaskUpdate = (data: { boardId: string; task: Task }) => {
 
-    console.log('📨 TASK RECEIVED:', data.task._id, 'for board:', data.boardId);
-    
-    if (data.boardId === boardId) {
+      console.log('TASK RECEIVED:', data.task?._id, 'for board:', data.boardId);
+      
+      if (data.boardId === boardId && data.task?._id) {  // NULL CHECKS
+       
       setTasks(prev => {
-        const index = prev.findIndex(t => t._id === data.task._id);
+      const index = prev.findIndex(t => t._id === data.task!._id);;
         if (index > -1) {
           const updated = [...prev];
           updated[index] = data.task;
@@ -129,7 +130,7 @@ useEffect(() => {
     }
   };
 
-socket.on('task-updated', (data) => {
+socket.on('task-updated', (data: { boardId: string; task: Task }) => {
   console.log('📨 TASK UPDATE RECEIVED:', data.task._id, data.boardId); //DEBUG
 });
 

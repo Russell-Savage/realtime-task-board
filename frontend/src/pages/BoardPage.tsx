@@ -6,8 +6,11 @@ import { useSocket } from '../context/SocketContext';
 
 const BoardPage: React.FC = () => {
   const { boardId } = useParams<{ boardId: string }>();
+  const { socket } = useSocket();
+  const { tasks, loading, createTask, updateTask } = useTasks();
+  const { logout } = useAuth();
+  const navigate = useNavigate();
 
-    const { socket } = useSocket();
   useEffect(() => {
     if (socket && boardId) {
       console.log('🏠 Joining board room:', boardId);
@@ -15,16 +18,11 @@ const BoardPage: React.FC = () => {
     }
   }, [socket, boardId]);
 
-  const { tasks, loading, createTask, updateTask } = useTasks();
-  const { logout } = useAuth();
-  const navigate = useNavigate();
-
   const [newTaskTitle, setNewTaskTitle] = useState('');
 
   const handleCreateTask = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!newTaskTitle.trim() || !boardId) return;
-
     try {
       const maxPosition = tasks.length > 0 ? Math.max(...tasks.map(t => t.position)) : 0;
       await createTask({

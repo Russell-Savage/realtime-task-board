@@ -113,7 +113,7 @@ export const updateTask = async (req: Request, res: Response): Promise<void> => 
 
     (global.io as any).to(`board:${task.board!.toString()}`).emit('task-updated', { 
       boardId: task.board!.toString(),
-      ask: populatedTask 
+      task: populatedTask 
     });
 
     res.json({
