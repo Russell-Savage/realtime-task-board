@@ -43,19 +43,33 @@ export class App {
   const authRoutes = require('../src/routes/authRoutes');
   this.app.use('/api/auth', authRoutes);
 
+  const boardRoutes = require('../routes/boardRoutes');
+  this.app.use('/api/boards', boardRoutes);
+
   // Root API
   this.app.get('/api', (req: Request, res: Response) => {
     res.json({ message: 'Realtime Task Board API v1' });
   });
-}
+ }
 
 
   private initializeSocketHandlers(): void {
     this.io.on('connection', (socket) => {
       console.log('Client connected:', socket.id);
+      
+    // Join user's boards room
+    socket.on('join-board', (boardId: string) => {
+      socket.join(`board:${boardId}`);
+      console.log(`User ${socket.id} joined board ${boardId}`);
+      });
 
-      socket.on('disconnect', () => {
-        console.log('Client disconnected:', socket.id);
+    // Broadcast board changes
+    socket.on('board-updated', (data: { boardId: string; board: any }) => {
+      this.io.to(`board:${data.boardId}`).emit('board-changed', data.board);
+      });
+
+    socket.on('disconnect', () => {
+      console.log('Client disconnected:', socket.id);
       });
     });
   }

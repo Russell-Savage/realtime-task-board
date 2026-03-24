@@ -4,6 +4,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import LoginForm from './components/Auth/LoginForm';
 import RegisterForm from './components/Auth/RegisterForm';
 import { ProtectedRoute } from './components/Common/ProtectedRoute';
+import { SocketProvider } from './context/SocketContext';
 
 function AppContent() {
   const { user, logout } = useAuth();
@@ -125,7 +126,9 @@ const BoardsPage = () => (
 function App() {
   return (
     <AuthProvider>
-      <AppContent />
+      <SocketProvider>
+        <AppContent />
+      </SocketProvider>
     </AuthProvider>
   );
 }
