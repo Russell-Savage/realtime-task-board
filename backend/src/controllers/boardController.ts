@@ -2,6 +2,10 @@ import { Request, Response } from 'express';
 import Board, { IBoard } from '../models/Board';
 import { verifyToken } from '../utils/jwt';
 
+declare global {
+  var io: any;
+}
+
 export const getBoards = async (req: Request, res: Response): Promise<void> => {
   try {
     const token = req.headers.authorization?.replace('Bearer ', '');
@@ -54,6 +58,11 @@ export const createBoard = async (req: Request, res: Response): Promise<void> =>
 
     const populatedBoard = await Board.findById(board._id)
       .populate('owner', 'email');
+
+  if (global.io && populatedBoard) {
+    console.log('📡 Broadcasting board-changed:', populatedBoard._id);
+    global.io.emit('board-changed', populatedBoard);
+  }
 
     res.status(201).json({
       success: true,

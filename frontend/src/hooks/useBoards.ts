@@ -43,6 +43,7 @@ export const useBoards = () => {
       const data = await res.json();
       
       if (socket) {
+        console.log('📤 EMITTING board-updated:', data);
         socket.emit('board-updated', { 
           boardId: data.board._id, 
           board: data.board 
@@ -63,24 +64,30 @@ export const useBoards = () => {
   }, [token, fetchBoards]);
 
   useEffect(() => {
-    if (!socket) return;
+  if (!socket) return;
 
-    socket.on('board-changed', (board: Board) => {
-      setBoards(prev => {
-        const index = prev.findIndex(b => b._id === board._id);
-        if (index > -1) {
-          const updated = [...prev];
-          updated[index] = board;
-          return updated;
-        }
-        return [board, ...prev];
-      });
+  console.log('🔗 Boards socket listening...'); // Debug #1
+
+  const handleBoardChange = (board: Board) => {
+    console.log('📨 BOARD CHANGED:', board._id, board.name);
+    setBoards(prev => {
+      const index = prev.findIndex(b => b._id === board._id);
+      if (index > -1) {
+        const updated = [...prev];
+        updated[index] = board;
+        return updated;
+      }
+      return [board, ...prev];
     });
+  };
 
-    return () => {
-      socket.off('board-changed');
-    };
-  }, [socket]);
+  socket.on('board-changed', handleBoardChange);
+
+  return () => {
+    socket.off('board-changed', handleBoardChange);
+  };
+}, [socket]);
+
 
   return { boards, loading, fetchBoards, createBoard };
 };

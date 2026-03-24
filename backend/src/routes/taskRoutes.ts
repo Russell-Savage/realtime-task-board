@@ -14,3 +14,4 @@ router.put('/:taskId', updateTask);
 router.delete('/:taskId', deleteTask);
 
 export default router;
+module.exports = router;

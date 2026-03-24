@@ -72,6 +72,11 @@ export const createTask = async (req: Request, res: Response): Promise<void> => 
       .populate('assignee', 'email')
       .populate('board', 'name');
 
+    (global.io as any).to(`board:${boardId}`).emit('task-updated', { 
+      boardId, 
+      task: populatedTask 
+    });
+
     res.status(201).json({
       success: true,
       task: populatedTask
@@ -101,10 +106,15 @@ export const updateTask = async (req: Request, res: Response): Promise<void> => 
 
     Object.assign(task, updates);
     await task.save();
-
+  
     const populatedTask = await Task.findById(task._id)
       .populate('assignee', 'email')
       .populate('board', 'name');
+
+    (global.io as any).to(`board:${task.board!.toString()}`).emit('task-updated', { 
+      boardId: task.board!.toString(),
+      ask: populatedTask 
+    });
 
     res.json({
       success: true,

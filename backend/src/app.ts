@@ -4,6 +4,9 @@ import http from 'http';
 import { Server } from 'socket.io';
 import connectDB from './config/db';
 
+declare global {
+  var io: any;
+}
 export class App {
   public app: Application;
   public server: http.Server;
@@ -46,6 +49,9 @@ export class App {
   const boardRoutes = require('../src/routes/boardRoutes');
   this.app.use('/api/boards', boardRoutes);
 
+  const taskRoutes = require('../src/routes/taskRoutes');
+  this.app.use('/api/tasks', taskRoutes);
+
   // Root API
   this.app.get('/api', (req: Request, res: Response) => {
     res.json({ message: 'Realtime Task Board API v1' });
@@ -54,6 +60,7 @@ export class App {
 
 
   private initializeSocketHandlers(): void {
+    global.io = this.io;
     this.io.on('connection', (socket) => {
       console.log('Client connected:', socket.id);
       
@@ -67,6 +74,11 @@ export class App {
     socket.on('board-updated', (data: { boardId: string; board: any }) => {
       this.io.to(`board:${data.boardId}`).emit('board-changed', data.board);
       });
+
+    socket.on('task-updated', (data: { boardId: string; task: any }) => {
+      console.log('📡 Broadcasting task-updated:', data.task._id); //DEBUG
+      socket.to(`board:${data.boardId}`).emit('task-updated', data);
+});
 
     socket.on('disconnect', () => {
       console.log('Client disconnected:', socket.id);

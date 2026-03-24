@@ -27,11 +27,11 @@ export const SocketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     if (!socket) return;
 
     socket.on('connect', () => {
-      console.log('Socket connected:', socket.id);
+      console.log('🟢 SOCKET CONNECTED:', socket.id); 
     });
 
     socket.on('disconnect', () => {
-      console.log('Socket disconnected');
+       console.log('🔴 SOCKET DISCONNECTED');
     });
 
     socket.connect();
