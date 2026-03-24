@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
-import User from './models/User';
-import connectDB from './config/db';
+import User from '../models/User';
+import connectDB from '../config/db';
 
 // Load .env FIRST
 dotenv.config();
