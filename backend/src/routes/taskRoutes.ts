@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { 
+import {  
   getTasksByBoard, 
   createTask, 
   updateTask, 
@@ -12,6 +12,8 @@ router.get('/board/:boardId', getTasksByBoard);
 router.post('/', createTask);
 router.put('/:taskId', updateTask);
 router.delete('/:taskId', deleteTask);
+router.delete('/:taskId', deleteTask);
+
 
 export default router;
 module.exports = router;

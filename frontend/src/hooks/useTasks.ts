@@ -129,6 +129,33 @@ export const useTasks = () => {
   }
 }, [token, socket, boardId, tasks]);
 
+const deleteTask = useCallback(async (taskId: string) => {
+  if (!confirm('Delete this task?')) return;
+  
+  try {
+    setError(null);
+    
+    const res = await fetch(`/api/tasks/${taskId}`, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    
+    if (!res.ok) {
+      const errData = await res.json().catch(() => ({}));
+      throw new Error(errData.error || 'Delete failed');
+    }
+    
+    if (socket) {
+      console.log('🗑️ Emitting task-deleted:', taskId);
+      socket.emit('task-deleted', { boardId, taskId });
+    }
+  } catch (error: any) {
+    console.error('Delete failed:', error);
+    setError(error.message || 'Delete failed');
+    throw error;
+  }
+}, [token, socket, boardId]);
+
   useEffect(() => {
     if (boardId && token) {
       fetchTasks();
@@ -157,14 +184,19 @@ useEffect(() => {
       });
     }
   };
-
+  const handleTaskDeleted = (data: { boardId: string; taskId: string }) => {
+    console.log('🗑️ Task deleted:', data.taskId);
+    if (data.boardId === boardId) {
+      setTasks(prev => prev.filter(t => t._id !== data.taskId));
+    }
+  };
   socket.on('task-updated', handleTaskUpdate);
-
+  socket.on('task-deleted', handleTaskDeleted);
   return () => {
     socket.off('task-updated', handleTaskUpdate);
+    socket.off('task-deleted', handleTaskDeleted)
   };
 }, [socket, boardId]);
 
-
-  return { tasks, loading, error, fetchTasks, createTask, updateTask };
+  return { tasks, loading, error, fetchTasks, createTask, updateTask, deleteTask };
 };

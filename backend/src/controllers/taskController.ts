@@ -129,21 +129,51 @@ export const updateTask = async (req: Request, res: Response): Promise<void> => 
 export const deleteTask = async (req: Request, res: Response): Promise<void> => {
   try {
     const token = req.headers.authorization?.replace('Bearer ', '');
-    const decoded = verifyToken(token!);
+    const { taskId } = req.params;
+    
+    if (!token || !taskId) {
+      res.status(400).json({ error: 'Missing token or taskId' });
+      return;
+    }
+
+    const decoded = verifyToken(token);
     if (!decoded) {
       res.status(401).json({ error: 'Invalid token' });
       return;
     }
-    const { taskId } = req.params;
 
-    const task = await Task.findOneAndDelete({ 
-      _id: taskId, 
-      board: { $in: await Board.distinct('_id', { owner: decoded.userId }) } 
-    });
-
+    const task = await Task.findById(taskId);
     if (!task) {
       res.status(404).json({ error: 'Task not found' });
       return;
+    }
+
+        const board = await Board.findOne({ 
+      _id: task.board, 
+      owner: decoded.userId 
+    });
+    if (!board) {
+      res.status(403).json({ error: 'Not authorized' });
+      return;
+    }
+    
+    await Task.findByIdAndDelete(taskId);
+
+    if (global.io && task) {
+      console.log('🗑️ Broadcasting task-deleted:', taskId);
+      global.io.to(`board:${task.board}`).emit('task-deleted', taskId);
+    }
+    if (!task) {
+      res.status(404).json({ error: 'Task not found' });
+      return;
+    }
+
+    if (global.io) {
+      console.log('🗑️ Broadcasting task-deleted:', taskId);
+      global.io.to(`board:${task.board}`).emit('task-deleted', { 
+        boardId: task.board, 
+        taskId 
+      });
     }
 
     res.json({ success: true });

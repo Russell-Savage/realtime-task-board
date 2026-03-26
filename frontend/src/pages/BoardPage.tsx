@@ -7,7 +7,7 @@ import { useSocket } from '../context/SocketContext';
 const BoardPage: React.FC = () => {
   const { boardId } = useParams<{ boardId: string }>();
   const { socket } = useSocket();
-  const { tasks, loading, createTask, updateTask } = useTasks();
+  const { tasks, loading, createTask, updateTask, deleteTask } = useTasks();
   const { logout } = useAuth();
   const navigate = useNavigate();
 
@@ -123,6 +123,18 @@ const BoardPage: React.FC = () => {
                         <option value="in-progress">In Progress</option>
                         <option value="done">Done</option>
                       </select>
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => deleteTask(task._id)}
+                            className="text-red-500 hover:text-red-700 p-1"
+                            title="Delete"
+                          >
+                            🗑️
+                          </button>
+                        </div>
+                      </div>
+
                     </div>
                     {task.description && (
                       <p className="text-sm text-gray-600 mb-2">{task.description}</p>
