@@ -63,6 +63,51 @@ export const useBoards = () => {
       throw error;
     }
   };
+const deleteBoard = useCallback(async (boardId: string) => {
+  if (!confirm(`Delete "${boards.find(b => b._id === boardId)?.name}"?`)) return;
+  
+  try {
+    const res = await fetch(`/api/boards/${boardId}`, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    if (!res.ok) throw new Error('Delete failed');
+    
+    if (socket) {
+      console.log('🗑️ Emitting board-deleted:', boardId);
+      socket.emit('board-deleted', boardId);
+    }
+  } catch (error: any) {
+    console.error('Delete board failed:', error);
+    alert(error.message);
+  }
+}, [token, socket, boards]);
+
+const renameBoard = useCallback(async (boardId: string, newName: string) => {
+  try {
+    const res = await fetch(`/api/boards/${boardId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({ name: newName })
+    });
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error || 'Rename failed');
+    }
+    
+    const data = await res.json();
+    if (socket) {
+      socket.emit('board-updated', data.board);
+    }
+    return data.board;
+  } catch (error: any) {
+    console.error('Rename failed:', error);
+    throw error;
+  }
+}, [token, socket]);
 
   useEffect(() => {
     if (token) {
@@ -87,14 +132,29 @@ export const useBoards = () => {
       return [board, ...prev];
     });
   };
+  const handleBoardDeleted = (deletedId: string) => {
+  console.log('🗑️ Board deleted:', deletedId);
+  setBoards(prev => prev.filter(b => b._id !== deletedId));
+};
+
+const handleBoardUpdated = (updatedBoard: Board) => {
+  console.log('✏️ Board renamed:', updatedBoard._id);
+  setBoards(prev => 
+    prev.map(b => b._id === updatedBoard._id ? updatedBoard : b)
+  );
+};
 
   socket.on('board-changed', handleBoardChange);
+  socket.on('board-deleted', handleBoardDeleted);
+  socket.on('board-updated', handleBoardUpdated);
 
   return () => {
+    socket.off('board-deleted', handleBoardDeleted);
+    socket.off('board-updated', handleBoardUpdated);
     socket.off('board-changed', handleBoardChange);
   };
 }, [socket]);
 
 
-  return { boards, loading, error, fetchBoards, createBoard };
+  return { boards, loading, error, fetchBoards, createBoard, deleteBoard, renameBoard };
 };

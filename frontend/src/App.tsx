@@ -53,6 +53,8 @@ function AppContent() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/boards" element={<BoardsPage />} />
+        <Route path="/" element={<BoardsPage />} />
+        <Route path="/boards/:boardId" element={<BoardPage />} />
         <Route path="/board/:boardId" element={<BoardPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

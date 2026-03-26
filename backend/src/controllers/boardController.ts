@@ -73,3 +73,81 @@ export const createBoard = async (req: Request, res: Response): Promise<void> =>
     res.status(500).json({ error: 'Server error' });
   }
 };
+
+export const deleteBoard = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const token = req.headers.authorization?.replace('Bearer ', '');
+    const { boardId } = req.params;
+    
+    if (!token || !boardId) {
+      res.status(400).json({ error: 'Missing token or boardId' });
+      return;
+    }
+
+    const decoded = verifyToken(token);
+    if (!decoded) {
+      res.status(401).json({ error: 'Invalid token' });
+      return;
+    }
+
+    const board = await Board.findOneAndDelete({ 
+      _id: boardId, 
+      owner: decoded.userId 
+    });
+    
+    if (!board) {
+      res.status(404).json({ error: 'Board not found' });
+      return;
+    }
+
+    if (global.io) {
+      console.log('🗑️ Broadcasting board-deleted:', boardId);
+      global.io.emit('board-deleted', boardId);
+    }
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Delete board error:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+
+export const updateBoard = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const token = req.headers.authorization?.replace('Bearer ', '');
+    const { boardId } = req.params;
+    const { name } = req.body;
+    
+    if (!token || !boardId || !name) {
+      res.status(400).json({ error: 'Missing token, boardId or name' });
+      return;
+    }
+
+    const decoded = verifyToken(token);
+    if (!decoded) {
+      res.status(401).json({ error: 'Invalid token' });
+      return;
+    }
+
+    const board = await Board.findOneAndUpdate(
+      { _id: boardId, owner: decoded.userId },
+      { name, updatedAt: new Date() },
+      { new: true }
+    ).populate('owner', 'email');
+    
+    if (!board) {
+      res.status(404).json({ error: 'Board not found' });
+      return;
+    }
+
+    if (global.io) {
+      console.log('✏️ Broadcasting board-updated:', boardId);
+      global.io.emit('board-updated', board);
+    }
+
+    res.json({ success: true, board });
+  } catch (error) {
+    console.error('Update board error:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
