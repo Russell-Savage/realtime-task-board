@@ -18,25 +18,37 @@ export const useTasks = () => {
   const { boardId } = useParams<{ boardId: string }>();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const { token } = useAuth();
   const { socket } = useSocket();
 
   const fetchTasks = useCallback(async () => {
-    if (!boardId || !token) return;
-
-    try {
-      setLoading(true);
-      const res = await fetch(`/api/tasks/board/${boardId}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      const data = await res.json();
-      setTasks(data.tasks || []);
-    } catch (error) {
-      console.error('Failed to fetch tasks:', error);
-    } finally {
+  try {
+    if (!boardId || !token) {
+      setError('Missing board or token');
       setLoading(false);
+      return;
     }
-  }, [boardId, token]);
+    setError(null);
+    setLoading(true);
+    
+    const res = await fetch(`/api/tasks/board/${boardId}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    if (!res.ok) {
+      const errData = await res.json().catch(() => ({}));
+      throw new Error(errData.error || `HTTP ${res.status}`); 
+    }
+    const data = await res.json();
+    setTasks(data.tasks || []);
+  } catch (error: any) {
+    console.error('Failed to fetch tasks:', error);
+    setError(error.message || 'Failed to load tasks');
+  } finally {
+    setLoading(false);
+  }
+}, [boardId, token]);
+
 
   const createTask = useCallback(async (taskData: {
     title: string;
@@ -44,7 +56,10 @@ export const useTasks = () => {
     status?: 'todo' | 'in-progress' | 'done';
     position?: number;
   }) => {
+  try {
     if (!boardId || !token) throw new Error('Missing boardId or token');
+    
+    setError(null);
 
     const res = await fetch('/api/tasks', {
       method: 'POST',
@@ -56,8 +71,8 @@ export const useTasks = () => {
     });
 
     if (!res.ok) {
-      const error = await res.json();
-      throw new Error(error.error || 'Failed to create task');
+      const errorData = await res.json();
+      throw new Error(errorData.error || 'Failed to create task');
     }
 
     const data = await res.json();
@@ -70,10 +85,18 @@ export const useTasks = () => {
     }
     
     return data.task;
-  }, [boardId, token, socket]);
+  } catch (error: any) {
+    console.error('Failed to create task:', error);
+    setError(error.message || 'Failed to create task');
+    throw error;
+  }
+}, [boardId, token, socket]);
 
   const updateTask = useCallback(async (taskId: string, updates: Partial<Task>) => {
+    try {
     if (!token) throw new Error('Missing token');
+    
+    setError(null);
 
     const res = await fetch(`/api/tasks/${taskId}`, {
       method: 'PUT',
@@ -85,8 +108,8 @@ export const useTasks = () => {
     });
 
     if (!res.ok) {
-      const error = await res.json();
-      throw new Error(error.error || 'Failed to update task');
+      const errorData = await res.json();
+      throw new Error(errorData.error || 'Failed to update task');
     }
 
     const data = await res.json();
@@ -99,7 +122,12 @@ export const useTasks = () => {
     }
     
     return data.task;
-  }, [token, socket, boardId, tasks]);
+  } catch (error: any) {
+    console.error('Failed to update task:', error);
+    setError(error.message || 'Failed to update task');
+    throw error;
+  }
+}, [token, socket, boardId, tasks]);
 
   useEffect(() => {
     if (boardId && token) {
@@ -130,10 +158,6 @@ useEffect(() => {
     }
   };
 
-socket.on('task-updated', (data: { boardId: string; task: Task }) => {
-  console.log('📨 TASK UPDATE RECEIVED:', data.task._id, data.boardId); //DEBUG
-});
-
   socket.on('task-updated', handleTaskUpdate);
 
   return () => {
@@ -142,5 +166,5 @@ socket.on('task-updated', (data: { boardId: string; task: Task }) => {
 }, [socket, boardId]);
 
 
-  return { tasks, loading, fetchTasks, createTask, updateTask };
+  return { tasks, loading, error, fetchTasks, createTask, updateTask };
 };

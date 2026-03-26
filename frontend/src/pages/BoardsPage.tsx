@@ -9,6 +9,7 @@ const BoardsPage: React.FC = () => {
   const navigate = useNavigate();
   const [newBoardName, setNewBoardName] = useState('');
   const [creating, setCreating] = useState(false);
+  const [error] = useState<string | null>(null);
 
   useEffect(() => {
     if (!authLoading && !token) {
@@ -41,6 +42,14 @@ const handleCreateBoard = async (e: React.SubmitEvent<HTMLFormElement>) => {
   }
 };
 
+if (error) {
+  return (
+    <div className="p-8 text-center">
+      <div className="text-red-600 mb-4">{error}</div>
+      <button onClick={fetchBoards} className="btn-primary">Retry</button>
+    </div>
+  );
+}
   return (
     <div className="max-w-4xl mx-auto p-6">
       <div className="flex justify-between items-center mb-8">

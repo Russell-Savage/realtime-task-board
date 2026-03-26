@@ -16,15 +16,22 @@ export const useBoards = () => {
   const { token } = useAuth();
   const { socket } = useSocket();
 
+  const [error, setError] = useState<string | null>(null);
+
   const fetchBoards = useCallback(async () => {
     try {
+      setError(null);
       const res = await fetch('/api/boards', {
         headers: { Authorization: `Bearer ${token}` }
       });
+
+      if (!res.ok) throw new Error('Failed to fetch boards');
+
       const data = await res.json();
       setBoards(data.boards || []);
     } catch (error) {
       console.error('Failed to fetch boards:', error);
+      setError('Failed to load boards. Please refresh.');
     } finally {
       setLoading(false);
     }
@@ -66,7 +73,7 @@ export const useBoards = () => {
   useEffect(() => {
   if (!socket) return;
 
-  console.log('🔗 Boards socket listening...'); // Debug #1
+  console.log('🔗 Boards socket listening...'); // DEBUG
 
   const handleBoardChange = (board: Board) => {
     console.log('📨 BOARD CHANGED:', board._id, board.name);
@@ -89,5 +96,5 @@ export const useBoards = () => {
 }, [socket]);
 
 
-  return { boards, loading, fetchBoards, createBoard };
+  return { boards, loading, error, fetchBoards, createBoard };
 };
