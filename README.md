@@ -6,14 +6,13 @@
 [![Socket.io](https://img.shields.io/badge/Socket.io-black?style=for-the-badge&logo=socket.io&logoColor=white)](https://socket.io/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)](https://mongodb.com/)
 
-Real-time collaborative task board (Trello-style) with a Python-powered analytics worker. Multiple users can create boards, add tasks, drag between columns, and see live updates. A Python worker computes productivity metrics from MongoDB.
+Real-time collaborative task board (Trello-style). Multiple users can create boards, add tasks, drag between columns, and see live updates.
 
 ## ✨ Features
 
 - 🔐 JWT authentication (register/login)
 - 👥 Real-time collaboration via Socket.io (live task updates, presence)
 - 🧩 Drag & drop tasks between columns (Todo → In Progress → Done)
-- 📊 Python analytics worker (task velocity, bottlenecks, per-user stats)
 - 🏗️ TypeScript end-to-end (frontend + backend)
 - 🧪 Basic tests and API documentation
 - 🐳 Docker Compose ready
@@ -25,69 +24,64 @@ Real-time collaborative task board (Trello-style) with a Python-powered analytic
 │   React + TS    │◄──►│ Express + Socket │◄──►│   MongoDB    │
 │   (Frontend)    │    │   io + TS        │    │              │
 └─────────────────┘    └──────────────────┘    └──────────────┘
-                                │
-                       ┌──────────────────┐
-                       │ Python Analytics │
-                       │     Worker       │
-                       └──────────────────┘
 ```
+
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - Node.js 18+
-- Python 3.10+
 - MongoDB (Docker recommended)
 - npm or yarn
 
 ### 1. Clone & enter project
+
 ```bash
 git clone https://github.com/yourusername/realtime-task-board.git
 cd realtime-task-board
 ```
+
 ### 2. Environment
+
 ```bash
 cp .env.example .env
 # Edit .env with your JWT_SECRET, MONGO_URI, ports, etc.
 ```
+
 ### 3. Start MongoDB (Docker)
+
 ```bash
 docker-compose up -d mongo
 ```
+
 ### 4. Backend
+
 ```bash
 cd backend
 npm install
 npm run dev
 ```
+
 Backend runs on http://localhost:4000
 
 ### 5. Frontend
+
 ```bash
 cd ../frontend
 npm install
 npm run dev
 ```
+
 Frontend runs on http://localhost:5173
 
-### 6. Analytics worker (Python)
-Run periodically:
-
-```bash
-cd ../analytics-worker
-python -m venv .venv
-source .venv/bin/activate  # macOS/Linux
-# Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-python scripts/run_analytics.py
-```  
 <br>
 
 ## 📁 Project Structure
+
 ```text
 realtime-task-board/
 ├── backend/           # Express + Socket.io + TypeScript
 ├── frontend/          # React + TypeScript + Vite
-├── analytics-worker/  # Python + PyMongo
 ├── docker-compose.yml
 ├── .gitignore
 ├── LICENSE
@@ -95,17 +89,18 @@ realtime-task-board/
 ```
 
 ## 🔧 Tech Stack
+
 | Frontend   | Backend    | Database  | Other     |
 | ---------- | ---------- | --------- | --------- |
 | React 18   | Node.js 20 | MongoDB 7 | Socket.io |
 | TypeScript | Express.js | Mongoose  | Docker    |
-| Vite       | JWT Auth   | PyMongo   | ESLint    |
+| Vite       | JWT Auth   |           | ESLint    |
 
 ## 🧪 Testing
+
 ```bash
 cd backend && npm test
 cd ../frontend && npm run test
-cd ../analytics-worker && pytest
 ```
 
 ## 🎯 Future Enhancements
@@ -135,4 +130,5 @@ cd ../analytics-worker && pytest
 5.  Open Pull Request
 
 ## 📄 License
+
 MIT License – see LICENSE.
