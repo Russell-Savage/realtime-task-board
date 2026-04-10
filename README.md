@@ -24,6 +24,11 @@ Real-time collaborative task board (Trello-style). Multiple users can create boa
 │   React + TS    │◄──►│ Express + Socket │◄──►│   MongoDB    │
 │   (Frontend)    │    │   io + TS        │    │              │
 └─────────────────┘    └──────────────────┘    └──────────────┘
+                                │
+                       ┌──────────────────┐
+                       │ Python Analytics │
+                       │     Worker       │
+                       └──────────────────┘
 ```
 
 ## 🚀 Quick Start
