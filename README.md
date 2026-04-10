@@ -13,7 +13,6 @@ Real-time collaborative task board (Trello-style) with a Python-powered analytic
 - 🔐 JWT authentication (register/login)
 - 👥 Real-time collaboration via Socket.io (live task updates, presence)
 - 🧩 Drag & drop tasks between columns (Todo → In Progress → Done)
-- 📊 Python analytics worker (task velocity, bottlenecks, per-user stats)
 - 🏗️ TypeScript end-to-end (frontend + backend)
 - 🧪 Basic tests and API documentation
 - 🐳 Docker Compose ready
@@ -25,17 +24,12 @@ Real-time collaborative task board (Trello-style) with a Python-powered analytic
 │   React + TS    │◄──►│ Express + Socket │◄──►│   MongoDB    │
 │   (Frontend)    │    │   io + TS        │    │              │
 └─────────────────┘    └──────────────────┘    └──────────────┘
-                                │
-                       ┌──────────────────┐
-                       │ Python Analytics │
-                       │     Worker       │
-                       └──────────────────┘
+                                
 ```
 ## 🚀 Quick Start
 
 ### Prerequisites
 - Node.js 18+
-- Python 3.10+
 - MongoDB (Docker recommended)
 - npm or yarn
 
@@ -69,17 +63,6 @@ npm run dev
 ```
 Frontend runs on http://localhost:5173
 
-### 6. Analytics worker (Python)
-Run periodically:
-
-```bash
-cd ../analytics-worker
-python -m venv .venv
-source .venv/bin/activate  # macOS/Linux
-# Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-python scripts/run_analytics.py
-```  
 <br>
 
 ## 📁 Project Structure
@@ -87,7 +70,6 @@ python scripts/run_analytics.py
 realtime-task-board/
 ├── backend/           # Express + Socket.io + TypeScript
 ├── frontend/          # React + TypeScript + Vite
-├── analytics-worker/  # Python + PyMongo
 ├── docker-compose.yml
 ├── .gitignore
 ├── LICENSE
@@ -99,13 +81,12 @@ realtime-task-board/
 | ---------- | ---------- | --------- | --------- |
 | React 18   | Node.js 20 | MongoDB 7 | Socket.io |
 | TypeScript | Express.js | Mongoose  | Docker    |
-| Vite       | JWT Auth   | PyMongo   | ESLint    |
+| Vite       | JWT Auth   |           | ESLint    |
 
 ## 🧪 Testing
 ```bash
 cd backend && npm test
 cd ../frontend && npm run test
-cd ../analytics-worker && pytest
 ```
 
 ## 🎯 Future Enhancements
